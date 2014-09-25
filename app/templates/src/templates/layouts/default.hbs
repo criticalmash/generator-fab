@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{title}} | {{site.title}}</title>
+
+    {{! Custom styles for this template }}
+    <link href="{{assets}}/css/{{stylesheet}}" rel="stylesheet">
+
+  </head>
+  <body>
+
+    {{> header }}
+
+    {{> body }}
+
+    {{> footer }}
+
+    {{! javascripts }}
+    <script src="{{assets}}/js/{{script}}"></script>
+    {{! END javascripts }}
+
+  </body>
+</html>

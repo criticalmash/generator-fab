@@ -1,0 +1,13 @@
+// root scss file for project
+// grunt setup task needs to run before this file can be compiled
+
+/**
+ * settings and foundation files are copied over from the
+ * fondation bowe_component when grunt runs it's setup task
+ */
+
+@import "settings";
+
+@import "foundation";
+
+@import "theme";

@@ -1,4 +1,4 @@
-# generator-fab [![Build Status](https://secure.travis-ci.org/criticalmash/generator-fab.png?branch=master)](https://travis-ci.org/criticalmash/generator-fab)
+# generator-fab 
 
 #FAB Foundation, Assemble and Bower Generator
 

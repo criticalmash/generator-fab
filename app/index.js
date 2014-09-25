@@ -56,6 +56,16 @@ var FabGenerator = yeoman.generators.Base.extend({
       //this.template('_travis.yml', '.travis.yml');
       //this.template('README.md');
       this.src.copy('gitignore', '.gitignore');
+
+      this.template('Gruntfile.js');
+    },
+
+    /**
+     * source files used by SASS and Assemble tasks
+     */
+    src: function () {
+      this.dest.mkdir('src');
+      this.directory('src', 'src');
     },
 
     /**

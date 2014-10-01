@@ -1,0 +1,72 @@
+# =============================================
+# Site settings
+# =============================================
+sitename:     <%= projectName %>
+description:  <%= description %>
+
+# =============================================
+# Development server settings
+# =============================================
+server:
+  port:       9000
+  livereload: 35729
+
+
+# =============================================
+# Assemble settings
+# =============================================
+helpers:
+  - <%%= site.templates %>/helpers/*.js
+  - handlebars-helper-br
+  - handlebars-helper-slugify
+
+
+# =============================================
+# Front-End scripts
+# script files included in the site
+#
+# Development: files will be included in
+# the page separately in the order supplied
+#
+# Production: files are concatenated, uglified
+# and compressed into one file.
+# =============================================
+pagescripts:
+  vendor: ## from bower components directory
+    - jquery/dist/jquery.min.js
+    - jquery/dist/jquery.min.map
+    - modernizr/modernizr.js # foundation requires HTML5 browsers, modernizr shims older browsers
+    ## load foundation and all it's plugins as one file
+    # - foundation/js/foundation.min.js
+    ## Include foundation and select plugins (will reduce file sizes)
+    - foundation/js/foundation/foundation.js # main foundation file
+    # - foundation/js/foundation/foundation.abide.js
+    - foundation/js/foundation/foundation.accordion.js
+    # - foundation/js/foundation/foundation.alert.js
+    # - foundation/js/foundation/foundation.clearing.js
+    # - foundation/js/foundation/foundation.dropdown.js
+    # - foundation/js/foundation/foundation.equalizer.js
+    # - foundation/js/foundation/foundation.interchange.js
+    # - foundation/js/foundation/foundation.joyride.js
+    # - foundation/js/foundation/foundation.magellan.js
+    # - foundation/js/foundation/foundation.offcanvas.js
+    # - foundation/js/foundation/foundation.orbit.js
+    # - foundation/js/foundation/foundation.reveal.js
+    # - foundation/js/foundation/foundation.slider.js
+    # - foundation/js/foundation/foundation.tab.js
+    # - foundation/js/foundation/foundation.tooltip.js
+    - foundation/js/foundation/foundation.topbar.js
+  custom: ## files you create yourself
+    - main.js
+
+jsmaps:
+  vendor:
+    - jquery/dist/jquery.min.map
+    - jquery/dist/jquery.js
+
+# =============================================
+# Google Analytics settings
+# Replace id with GA ID to activate tracking
+# =============================================
+ga:
+  id:         false

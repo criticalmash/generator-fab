@@ -6,19 +6,25 @@
     <title>{{title}} | {{site.title}}</title>
 
     {{! Custom styles for this template }}
-    <link href="{{assets}}/css/{{stylesheet}}" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
 
   </head>
   <body>
 
     {{> header }}
-
-    {{> body }}
+    <div class="row header-block">
+      {{> body }}
+    </div>
 
     {{> footer }}
 
     {{! javascripts }}
-    <script src="{{assets}}/js/{{script}}"></script>
+    {{#each site.pagescripts.vendor}}
+      <script src="/js/vendor/{{this}}"></script>
+    {{/each}}
+    {{#each site.pagescripts.custom}}
+      <script src="/js/custom/{{this}}"></script>
+    {{/each}}
     {{! END javascripts }}
 
   </body>

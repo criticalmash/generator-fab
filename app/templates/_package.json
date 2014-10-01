@@ -11,7 +11,13 @@
     "grunt-contrib-copy": "^0.5.0",
     "load-grunt-tasks": "^0.6.0",
     "time-grunt": "^1.0.0",
-    "grunt-sass": "~0.14.2"
+    "grunt-sass": "~0.14.2",
+    "handlebars-helper-ghbtns": "~0.1.0",
+    "handlebars-helper-isactive": "~0.1.0",
+    "handlebars-helper-prettify": "~0.2.1",
+    "handlebars-helper-slugify": "~0.2.0",
+    "handlebars-helper-twitter": "~0.1.2",
+    "handlebars-helper-br": "~0.1.0"
   },
   "keywords": [
     "assemble",

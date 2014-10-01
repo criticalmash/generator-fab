@@ -23,6 +23,11 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
 
+    // Project metadata
+    // pkg   : grunt.file.readJSON('package.json'),
+    // vendor: grunt.file.readJSON('.bowerrc').directory,
+    site  : grunt.file.readYAML('_config.yml'),
+
     config: {
       src: 'src',
       dist: 'dist'
@@ -30,12 +35,12 @@ module.exports = function(grunt) {
 
     watch: {
       assemble: {
-        files: ['<%%= config.src %>/{content,templates}/{,*/}*.{md,hbs,yml}'],
-        tasks: ['assemble']
+        files: ['<%%= config.src %>/{content,templates}/{,*/}*.{md,hbs,yml}', '_config.yml'],
+        tasks: ['assemble', 'copy:main']
       },
       sass: {
         files: ['<%%= config.src %>/scss/{,*/}*.{scss,css}'],
-        tasks: ['sass:dev']
+        tasks: ['sass:dev', 'copy:main']
       },
       livereload: {
         options: {
@@ -43,9 +48,9 @@ module.exports = function(grunt) {
         },
         files: [
           '<%%= config.dist %>/{,*/}*.html',
-          '<%%= config.dist %>/assets/{,*/}*.css',
-          '<%%= config.dist %>/assets/{,*/}*.js',
-          '<%%= config.dist %>/assets/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%%= config.dist %>/css/{,*/}*.css',
+          '<%%= config.dist %>/js/{,*/}*.js',
+          '<%%= config.dist %>/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -73,8 +78,10 @@ module.exports = function(grunt) {
           flatten: true,
           assets: '<%%= config.dist %>/assets',
           layout: '<%%= config.src %>/templates/layouts/default.hbs',
+          site: '<%%= site %>',
           data: '<%%= config.src %>/data/*.{json,yml}',
-          partials: '<%%= config.src %>/templates/partials/*.hbs'<% if(plugins && plugins.length > 0){ %>,
+          helpers: '<%%= site.helpers %>',
+          partials: '<%%= config.src %>/templates/partials/*.hbs'<% if(plugins && plugins.length > 0){ %>
           plugins: [<% if(typeof plugins === 'object'){ _.each(plugins, function(name, i) { %>'<%= name %>'<% if(i < (plugins.length - 1)) { %>,<% } }); } else { %>'<%= name %>'<%} %>],<%}
           _.each(plugins, function(name, i) { if(name == 'permalinks') { %>
           permalinks: {
@@ -86,9 +93,11 @@ module.exports = function(grunt) {
           },<% }
           }); %>
         },
-        files: {
-          '<%%= config.dist %>/': ['<%%= config.src %>/templates/pages/*.hbs']
-        }
+        // File info
+        expand: true, // use extra file management features
+        cwd: '<%%= config.src %>/content/', // we're telling grunt to use pages dir as our copy root
+        src: '**/*.{md,hbs}',
+        dest: '<%%= config.dist %>/' // whatevers in docs is now in here
       }
     },
 
@@ -96,8 +105,34 @@ module.exports = function(grunt) {
       main:{
         files:[
           {
-            src: 'src/assets/css/app.css',
-            dest: '<%%= config.dist %>/assets/css/app.css'
+            expand: true,
+            cwd: '<%= config.src %>/css',
+            src: '*',
+            dest: '<%= config.dist %>/css/'
+          },
+          {
+            expand: true,
+            cwd: 'bower_components/',
+            src: '<%%= site.pagescripts.vendor %>',
+            dest: '<%%= config.dist %>/js/vendor/'
+          },
+          {
+            expand: true,
+            cwd: 'bower_components/',
+            src: '<%= site.jsmaps.vendor %>',
+            dest: '<%= config.dist %>/js/vendor/'
+          },
+          {
+            expand: true,
+            cwd: 'src/js',
+            src: '<%%= site.pagescripts.custom %>',
+            dest: '<%%= config.dist %>/js/custom/'
+          },
+          {
+            expand: true,
+            cwd: 'src/img',
+            src: ['<%%= config.src %>/img/**'],
+            dest: '<%%= config.dist %>/img/'
           }
         ]
       },
@@ -105,11 +140,11 @@ module.exports = function(grunt) {
         files:[
           {
             src: 'bower_components/foundation/scss/foundation.scss',
-            dest: '<%%= config.src %>/assets/scss/app.scss'
+            dest: '<%%= config.src %>/scss/_foundation.scss'
           },
           {
             src: 'bower_components/foundation/scss/foundation/_settings.scss',
-            dest: '<%%= config.src %>/assets/scss/_settings.scss'
+            dest: '<%%= config.src %>/scss/_settings.scss'
           }
         ]
       }
@@ -126,24 +161,25 @@ module.exports = function(grunt) {
           //sourceComments: 'map'  // remove for production
         },
         files: {
-          'css/app.css': 'scss/app.scss'
+          '<%%= config.src %>/css/app.css': '<%%= config.src %>/scss/app.scss'
         }
       },
       dev: {
         options: {
           //outputStyle: 'compressed'
-          outputStyle: 'nested',
-          //sourceComments: 'map'  // remove for production
+          // outputStyle: 'nested',
+          sourceComments: 'map',  // remove for production
+          sourceMap: 'sass',
         },
         files: {
-          '<%%= config.src %>/assets/css/app.css': '<%%= config.src %>/assets/scss/app.scss'
+          '<%%= config.src %>/css/app.css': '<%%= config.src %>/scss/app.scss'
         }
       }
     },
 
     // Before generating any new files,
     // remove any previously-created files.
-    clean: ['<%%= config.dist %>/**/*.{html,xml}']
+    clean: ['<%%= config.dist %>/**/*.{html,xml,css}']
 
   });
 
@@ -154,15 +190,18 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('server', [
-    'build',
+    'clean',
     'sass:dev',
+    'copy:main',
+    'assemble',
     'connect:livereload',
     'watch'
   ]);
 
   grunt.registerTask('build', [
     'clean',
-    'copy',
+    'sass:dist',
+    'copy:main',
     'assemble'
   ]);
 

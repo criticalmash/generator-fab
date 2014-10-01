@@ -8,6 +8,7 @@ var FabGenerator = yeoman.generators.Base.extend({
   initializing: function () {
     this.pkg = require('../package.json');
     this.projectName = '';
+    this.plugins = []; // TO-DO: create a prompt for this variable
   },
 
   prompting: function () {
@@ -48,16 +49,21 @@ var FabGenerator = yeoman.generators.Base.extend({
 
   writing: {
     projectfiles: function () {
+      /**
+       * takes a template file in the source directory, inserts
+       * variables from 'this' and outputs the altered file in
+       * the destination directory
+       */
       this.template('_package.json', 'package.json');
       this.template('_bower.json', 'bower.json');
       this.template('editorconfig', '.editorconfig');
       this.template('jshintrc', '.jshintrc');
       this.template('_README.md', 'README.md');
       //this.template('_travis.yml', '.travis.yml');
-      //this.template('README.md');
-      this.src.copy('gitignore', '.gitignore');
-
       this.template('Gruntfile.js');
+      this.template('_config.yml');
+
+      this.src.copy('gitignore', '.gitignore');
     },
 
     /**
@@ -66,6 +72,7 @@ var FabGenerator = yeoman.generators.Base.extend({
     src: function () {
       this.dest.mkdir('src');
       this.directory('src', 'src');
+      this.dest.mkdir('src/img/');
     },
 
     /**
@@ -92,7 +99,14 @@ var FabGenerator = yeoman.generators.Base.extend({
 
   end: function () {
     if (this.shouldRunInstall) {
-      this.installDependencies();
+      var self = this;
+      this.installDependencies({
+        callback: function () {
+          self.log(yosay(
+            'Run "grunt setup" to finish generation.\nSee README.md for instructions on where to go next'
+          ));
+        }
+      });
     }
   }
 });

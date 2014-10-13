@@ -106,9 +106,9 @@ module.exports = function(grunt) {
         files:[
           {
             expand: true,
-            cwd: '<%= config.src %>/css',
+            cwd: '<%%= config.src %>/css',
             src: '*',
-            dest: '<%= config.dist %>/css/'
+            dest: '<%%= config.dist %>/css/'
           },
           {
             expand: true,
@@ -119,8 +119,8 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: 'bower_components/',
-            src: '<%= site.jsmaps.vendor %>',
-            dest: '<%= config.dist %>/js/vendor/'
+            src: '<%%= site.jsmaps.vendor %>',
+            dest: '<%%= config.dist %>/js/vendor/'
           },
           {
             expand: true,
